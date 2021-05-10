@@ -1,0 +1,29 @@
+<%- include('./partials/header.ejs') %>
+
+<div class="container-fluid">
+  <div class="container text-center mt-4 p-5">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <h1>All Reported Sightings</h1>
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2"></div>
+
+    <div class="col-sm-8">
+      <% if (content.length > 1) { %> <% content.forEach(sighting => { %>
+      <div class="card p-3 mb-3">
+        <h2><%= sighting.city %></h2>
+        <small><%= sighting.text %> </small>
+        <a href="/sighting/<%= index %>">Link</a>
+      </div>
+      <% index += 1%> <% }) %> <% } %>
+    </div>
+    <div class="col-sm-2"></div>
+  </div>
+</div>
+
+<%- include('./partials/footer.ejs') %>

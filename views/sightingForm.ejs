@@ -1,0 +1,73 @@
+<%- include('./partials/header.ejs') %>
+
+<div class="container text-center mt-3 p-5">
+  <div class="row">
+    <div class="col-sm-2"></div>
+    <div class="sol-sm-8">
+      <h2>Report a new UFO sighting</h2>
+    </div>
+    <div class="col-sm-2"></div>
+  </div>
+</div>
+
+<div class="container mt-5 p-5">
+  <div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+      <form>
+        <div class="form-group">
+          <label for="formGroupExampleInput">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            id="formGroupExampleInput"
+            placeholder="Describe what you saw"
+          />
+        </div>
+        <div class="form-group">
+          <label for="formGroupExampleInput2">City</label>
+          <input
+            type="text"
+            class="form-control"
+            id="formGroupExampleInput2"
+            placeholder="City"
+          />
+        </div>
+        <div class="form-group">
+          <label for="formGroupExampleInput">State</label>
+          <input
+            type="text"
+            class="form-control"
+            id="formGroupExampleInput"
+            placeholder="State"
+          />
+        </div>
+        <div class="form-group">
+          <label for="formGroupExampleInput2">Shape</label>
+          <input
+            type="text"
+            class="form-control"
+            id="formGroupExampleInput2"
+            placeholder="Any distinct shape to the UFO?"
+          />
+        </div>
+        <div class="form-group">
+          <label for="formGroupExampleInput">Duration</label>
+          <input
+            type="text"
+            class="form-control"
+            id="formGroupExampleInput"
+            placeholder="How long was the UFO visible for?"
+          />
+        </div>
+        <div class="form-group">
+          <label for="formGroupExampleInput2">Date</label>
+          <input type="text" class="form-control" id="formGroupExampleInput2" />
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-2"></div>
+  </div>
+</div>
+
+<%- include('./partials/footer.ejs') %>
