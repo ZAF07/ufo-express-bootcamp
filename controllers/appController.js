@@ -7,6 +7,7 @@ const home = (req, res) => {
     if (err) {
       console.log(`ERROR READING IN HOME CONTROLLER ${err}`);
     } else {
+      console.log('here is dsat ++#+#)$ ', req.body);
       console.log(`DATA RECIEVED FROM READ FN -> ${data.sightings}`);
       dataRecieved = data.sightings
       console.log(dataRecieved);
@@ -61,7 +62,8 @@ const editSingleSighting = (req, res) => {
     title: 'Edit Sighting',
     date_time,
     state,
-    summary
+    summary,
+    index
   })
     }
   })
@@ -73,12 +75,78 @@ const deleteSingleSighting = (req, res) => {
   res.send('Delete single sighting (DELETE REQ)')
 }
 const showShape = (req, res) => {
-  res.send('List all sighting shapes')
+    // Read into DB and retrieve all sightings
+  read('./data.json',(err, data) => {
+ 
+    if (err) {
+      console.log(`ERROR READING IN HOME CONTROLLER ${err}`);
+    } else {
+      console.log(`DATA RECIEVED FROM READ FN ShowShape -> ${data.sightings}`);
+      const shapesRecieved = [];
+      let index;
+      const { sightings } = data;
+
+  
+
+      sightings.forEach((sighting, i) => {
+        const {summary, shape} = sighting;
+            const singleShapeObj = {
+              i,
+              ...sighting
+      };
+        shapesRecieved.push(singleShapeObj)
+        console.log(`SHAPES ${shapesRecieved}`); 
+      });
+      // Render EJS with shapes as variables
+            res.render('shapes', {
+        title: 'Shapes Reported',
+        header: 'Reported Shapes',
+         shapesRecieved,
+        index
+
+      })
+      
+    }
+
+
+  })
+  
 }
 const showOneShape = (req, res) => {
-  res.send('List all sighting of single shape')
-}
+  // retrieve requested shape from query param
+  const shapeRequested = req.params.shape
 
+  // Read from DB and retrieve specific shape
+  read('./data.json', (err, data) => {
+    // store returned data 
+    const {sightings} = data;
+    const shapesToSend = [];
+    let index;
+
+    // loop returned data and pick similar shapes
+    sightings.forEach((sighting, i) => {
+      if (sighting.shape === shapeRequested) {
+        const shapeObj = {
+          ...sighting,
+          index: i
+        }
+        shapesToSend.push(shapeObj)
+
+      }
+    });
+  res.render('singleShape', {
+    title: 'Single Shape',
+    shapesToSend,
+    index,
+    shapeRequested
+  })
+  })
+
+}
+const editSighting = (req,res) => {
+  console.log(req.query.description);
+  res.status(200).json('TO EDIT!!!!', req.query.article)
+}
 
 
 
@@ -87,5 +155,6 @@ export {
   sightingForm, 
   singleSighting, 
   editSingleSighting, 
-  showShape, showOneShape
+  showShape, showOneShape,
+  editSighting
 }

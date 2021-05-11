@@ -1,11 +1,11 @@
 <%- include('./partials/header.ejs') %>
 
-<div class="container-fluid">
-  <div class="container text-center mt-4 p-5">
+<div class="container">
+  <div class="container text-center mt-2 mb-4 p-2">
     <div class="row">
       <div class="col-sm-4"></div>
       <div class="col-sm-4">
-        <h1>All Reported Sightings</h1>
+        <h1>Reported Sightings</h1>
       </div>
       <div class="col-sm-4"></div>
     </div>
@@ -15,10 +15,10 @@
 
     <div class="col-sm-8">
       <% if (content.length > 1) { %> <% content.forEach(sighting => { %>
-      <div class="card p-3 mb-3">
+      <div class="card p-4 mb-3 shadow rounded">
         <h2><%= sighting.city %></h2>
         <small><%= sighting.text %> </small>
-        <a href="/sighting/<%= index %>">Link</a>
+        <a href="/sighting/<%= index %>"><small>Read Report</small></a>
       </div>
       <% index += 1%> <% }) %> <% } %>
     </div>
