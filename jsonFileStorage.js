@@ -102,3 +102,44 @@ export function add(filename, key, input, callback) {
   // Read existing content from DB
   readFile(filename, 'utf-8', handleFileRead);
 }
+
+export function edit(filename, index, input, callback) {
+  const handleFileRead = (readErr, jsonContentStr) => {
+    if (readErr) {
+      console.error('Read error', readErr);
+      callback(null, readErr);
+      return;
+    }
+
+    // Parse file content into JS Object
+    const jsonContentObj = JSON.parse(jsonContentStr);
+    const DbObject = jsonContentObj.sightings;
+    console.log(`THIS RETUIRNED FROM EDIT FUNCTION ${jsonContentObj.sightings}`);
+    // // If index does not exist in DB, exit
+    // if (!(index in jsonContentObj)) {
+    //   // Call callback with relevant error message to let client handle
+    //   callback(null, "index doesn't exist");
+    //   return;
+    // }
+
+    // Add input element to target array
+    DbObject[index] = (input);
+
+    // Convert JS Object back to string for writing
+    const updatedJsonContentStr = JSON.stringify(jsonContentObj);
+
+    // Write updated content to DB
+    writeFile(filename, updatedJsonContentStr, (err, writeErr) => {
+      if (err) {
+        console.error('Error writing', updatedJsonContentStr, writeErr);
+        callback(writeErr, null);
+        return;
+      }
+      console.log('Edit success!');
+      // Call callback with updated JSON content Object
+      callback(null, jsonContentObj);
+    });
+  };
+
+  readFile(filename, 'utf-8', handleFileRead);
+}

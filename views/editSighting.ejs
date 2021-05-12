@@ -23,54 +23,68 @@
       <form action="/sighting/<%= index %>?__method=PUT" method="POST">
         <input type="hidden" name="_method" value="PUT" />
         <div class="form-group">
-          <label for="exampleFormControlTextarea1">Description</label>
+          <label for="Description">text</label>
           <textarea
             class="form-control"
-            id="exampleFormControlTextarea1"
+            id="text"
             rows="3"
-            name="description"
+            name="text"
             placeholder="What did you see?"
           ></textarea>
         </div>
         <div class="form-group">
-          <label for="formGroupExampleInput2">City</label>
+          <label for="City">City</label>
           <input
             type="text"
             class="form-control"
-            id="formGroupExampleInput2"
+            id="City"
             placeholder="City"
+            name="city"
           />
         </div>
         <div class="form-group">
-          <label for="formGroupExampleInput">State</label>
+          <label for="State">State</label>
           <input
             type="text"
             class="form-control"
-            id="formGroupExampleInput"
+            id="State"
             placeholder="State"
+            name="state"
           />
         </div>
         <div class="form-group">
-          <label for="formGroupExampleInput2">Shape</label>
+          <label for="Shape">Shape</label>
           <input
             type="text"
             class="form-control"
-            id="formGroupExampleInput2"
+            id="Shape"
             placeholder="Any distinct shape to the UFO?"
+            name="shape"
           />
         </div>
         <div class="form-group">
-          <label for="formGroupExampleInput">Duration</label>
+          <label for="Duration">Duration</label>
           <input
             type="text"
             class="form-control"
-            id="formGroupExampleInput"
+            id="Duration"
             placeholder="How long was the UFO visible for?"
+            name="duration"
           />
         </div>
         <div class="form-group">
-          <label for="formGroupExampleInput2">Date</label>
-          <input type="text" class="form-control" id="formGroupExampleInput2" />
+          <label for="Date">Date</label>
+          <input type="text" class="form-control" id="Date" name="date_time" />
+        </div>
+        <div class="form-group">
+          <label for="Description">sumamry</label>
+          <textarea
+            class="form-control"
+            id="summary"
+            rows="3"
+            name="summary"
+            placeholder="Summary?"
+          ></textarea>
         </div>
         <input type="submit" value="Edit" />
       </form>
