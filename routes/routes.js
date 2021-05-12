@@ -20,7 +20,7 @@ routes.get('/', home)
 routes.get('/sighting', sightingForm)
 routes.get('/sighting/:index', (singleSighting))
 routes.get('/sighting/:index/edit', (editSingleSighting))
-routes.put('/sighting/:index/edit', editSighting)
+routes.put('/sighting/:index', editSighting)
 routes.get('/shapes', showShape)
 routes.get('/shapes/:shape', showOneShape)
 
