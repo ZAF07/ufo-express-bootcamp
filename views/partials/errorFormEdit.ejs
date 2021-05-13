@@ -1,0 +1,240 @@
+<!-- ERROR -->
+
+<% const zaf = 'zaffere' 
+%> 
+
+  <div class="container mt-2 p-5">
+    <small><%= b %></small>
+
+<% b.forEach(a => { %>
+  <% 
+
+    %> 
+<% }) %>
+
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <form action="/sighting/<%= index %>?__method=PUT" method="POST">
+            <input type="hidden" name="_method" value="PUT" />
+            <div class="form-group">
+              <label for="Description">text</label>
+              <textarea
+                class="form-control <% b.forEach(a => { %>
+                                  <% if (a.param === 'text') { %>
+                                  is-invalid
+                                  <% } %>
+                                <% }) %>"
+                id="text"
+                rows="3"
+                name="text"
+                placeholder=" <%= zaf %>"
+                value="
+                  <%= editedData.text %>"
+              ></textarea>
+              <small class="text-danger">
+                <% b.forEach(a => { %>
+                  <% if (a.param === 'text') { %>
+                   <%= a.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="City">City</label>
+              <input
+                type="text"
+                class="form-control <% b.forEach(a => { %>
+  <% if (a.param === 'city') { %>
+   is-invalid
+  <% } %>
+<% }) %>"
+                id="city"
+                placeholder="City"
+                name="city"
+              />
+               <small class="text-danger">
+                <% b.forEach(a => { %>
+                  <% if (a.param === 'city') { %>
+                   <%= a.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="State">State</label>
+              <input
+                type="text"
+                class="form-control<% b.forEach(a => { %>
+  <% if (a.param === 'state') { %>
+   is-invalid
+  <% } %>
+<% }) %>"
+                id="state"
+                placeholder="State"
+                name="state"
+              />
+               <small class="text-danger">
+                <% b.forEach(a => { %>
+                  <% if (a.param === 'state') { %>
+                   <%= a.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="Shape">Shape</label>
+              <input
+                type="text"
+                class="form-control <% b.forEach(a => { %>
+  <% if (a.param === 'shape') { %>
+   is-invalid
+  <% } %>
+<% }) %>"
+                id="shape"
+                placeholder="Any distinct shape to the UFO?"
+                name="shape"
+              />
+               <small class="text-danger">
+                <% b.forEach(a => { %>
+                  <% if (a.param === 'shape') { %>
+                   <%= a.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="Duration">Duration</label>
+              <input
+              id="duration"
+                type="text"
+                class="form-control <% b.forEach(a => { %>
+  <% if (a.param === 'duration') { %>
+   is-invalid
+  <% } %>
+<% }) %>"
+                id="Duration"
+                placeholder="How long was the UFO visible for?"
+                name="duration"
+              />
+                             <small class="text-danger">
+                <% b.forEach(a => { %>
+                  <% if (a.param === 'duration') { %>
+                   <%= a.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="Date">Date</label>
+              <input
+              id="date"
+                type="text"
+                class="form-control <% b.forEach(a => { %>
+  <% if (a.param === 'date_time') { %>
+   is-invalid
+  <% } %>
+<% }) %>"
+              
+                name="date_time"
+              />
+               <small class="text-danger">
+                <% b.forEach(a => { %>
+                  <% if (a.param === 'date_time') { %>
+                   <%= a.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="Description">sumamry</label>
+              <textarea
+                class="form-control <% b.forEach(a => { %>
+  <% if (a.param === 'summary') { %>
+   is-invalid
+  <% } %>
+<% }) %>"
+                id="summary"
+                rows="3"
+                name="summary"
+                placeholder="<% b.forEach(a => { %>
+  <% if (a.param === 'summary') { %>
+   <%= a.msg %>
+  <% } else  { %>
+    
+  <% } %>
+<% }) %>"
+              ></textarea>
+               <small class="text-danger">
+                <% b.forEach(a => { %>
+                  <% if (a.param === 'summary') { %>
+                   <%= a.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <input
+              type="hidden"
+              name="created_at"
+              value="<%= new Date().toString() %>"
+            />
+            <input type="submit" value="Edit" />
+          </form>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+    </div>
+
+    <%- include('footer.ejs') %>
+  </div>
+</div>
+<script>
+  const text = document.getElementById('text');
+  const city = document.getElementById('city');
+  const state = document.getElementById('state');
+  const shape = document.getElementById('shape');
+  const duration = document.getElementById('duration');
+  const date = document.getElementById('date');
+  const summary = document.getElementById('summary');
+
+text.innerHTML = '<%= editedData.text %>'
+city.value = '<%= editedData.city %>'
+state.value = '<%= editedData.editedState %>'
+shape.value = '<%= editedData.shape %>'
+duration.value = '<%= editedData.duration %>'
+date.value = '<%= editedData.date_time %>'
+summary.innerHTML = '<%= editedData.editedSummary %>'
+
+  b.forEach(obj => {
+      switch (obj.param) {
+    case 'text':
+      console.log(`this is text ${text}`);
+      text.innerHTML = 'b'
+      break;
+    case 'city':
+      city.value = obj.msg
+      break;
+    case 'state':
+      state.innerHTML = obj.msg
+      break;
+    case 'shape':
+      shape.innerHTML = obj.msg
+      break;
+    case 'duration':
+      duration.innerHTML = obj.msg
+      break;
+    case 'date':
+      date.innerHTML = obj.msg
+      break;
+    case 'summary':
+      summary.innerHTML = obj.msg
+      break;
+  
+    default:
+      break;
+  }
+  })
+
+
+
+</script>

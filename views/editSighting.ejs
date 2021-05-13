@@ -5,92 +5,124 @@
     <div class="col-sm-2"></div>
     <div class="sol-sm-8">
       <h2>Edit a UFO sighting</h2>
-      <small
-        >You are editing a sighting which occurred in <%= state %> at <%=
-        date_time %>
-      </small>
-      <h5 class="mt-4">Sighting Summary</h5>
-      <small><%= summary %> </small>
+      <% if ( typeof state == 'string' && state) { %>
+      <small><%= state %></small>
+      <div class="container mt-2 p-5 d-none">
+        <% } else { %>
+
+        <small
+          >You are editing a sighting which occurred in <%=
+          editedData.editedState %> at <%= date_time %></small
+        >
+        <%}%>
+
+        <h5 class="mt-4">Sighting Summary</h5>
+        <% if ( typeof summary == 'string' && summary) { %>
+        <small><%= summary %></small>
+        <div class="container mt-2 p-5 d-none">
+          <% } else { %>
+
+          <small><%= editedSummary %></small>
+          <%}%>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
     </div>
-    <div class="col-sm-2"></div>
+
+    <% if ( typeof b == 'object' && b) { %> <%-
+    include('partials/errorFormEdit.ejs') %>
+    <div class="container mt-2 p-5 d-none">
+      <% } else { %>
+
+      <div class="container mt-2 p-5">
+        <%}%>
+
+        <!-- <div class="container mt-2 p-5"> -->
+        <div class="row">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8">
+            <form action="/sighting/<%= index %>?__method=PUT" method="POST">
+              <input type="hidden" name="_method" value="PUT" />
+              <div class="form-group">
+                <label for="Description">text</label>
+                <textarea
+                  class="form-control"
+                  id="text"
+                  rows="3"
+                  name="text"
+                  placeholder="What did you see?"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="City">City</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="City"
+                  placeholder="City"
+                  name="city"
+                />
+              </div>
+              <div class="form-group">
+                <label for="State">State</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="State"
+                  placeholder="State"
+                  name="state"
+                />
+              </div>
+              <div class="form-group">
+                <label for="Shape">Shape</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="Shape"
+                  placeholder="Any distinct shape to the UFO?"
+                  name="shape"
+                />
+              </div>
+              <div class="form-group">
+                <label for="Duration">Duration</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="Duration"
+                  placeholder="How long was the UFO visible for?"
+                  name="duration"
+                />
+              </div>
+              <div class="form-group">
+                <label for="Date">Date</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="Date"
+                  name="date_time"
+                />
+              </div>
+              <div class="form-group">
+                <label for="Description">sumamry</label>
+                <textarea
+                  class="form-control"
+                  id="summary"
+                  rows="3"
+                  name="summary"
+                  placeholder="Summary?"
+                ></textarea>
+              </div>
+              <input
+                type="hidden"
+                name="created_at"
+                value="<%= new Date().toString() %>"
+              />
+              <input type="submit" value="Edit" />
+            </form>
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-<div class="container mt-2 p-5">
-  <div class="row">
-    <div class="col-sm-2"></div>
-    <div class="col-sm-8">
-      <form action="/sighting/<%= index %>?__method=PUT" method="POST">
-        <input type="hidden" name="_method" value="PUT" />
-        <div class="form-group">
-          <label for="Description">text</label>
-          <textarea
-            class="form-control"
-            id="text"
-            rows="3"
-            name="text"
-            placeholder="What did you see?"
-          ></textarea>
-        </div>
-        <div class="form-group">
-          <label for="City">City</label>
-          <input
-            type="text"
-            class="form-control"
-            id="City"
-            placeholder="City"
-            name="city"
-          />
-        </div>
-        <div class="form-group">
-          <label for="State">State</label>
-          <input
-            type="text"
-            class="form-control"
-            id="State"
-            placeholder="State"
-            name="state"
-          />
-        </div>
-        <div class="form-group">
-          <label for="Shape">Shape</label>
-          <input
-            type="text"
-            class="form-control"
-            id="Shape"
-            placeholder="Any distinct shape to the UFO?"
-            name="shape"
-          />
-        </div>
-        <div class="form-group">
-          <label for="Duration">Duration</label>
-          <input
-            type="text"
-            class="form-control"
-            id="Duration"
-            placeholder="How long was the UFO visible for?"
-            name="duration"
-          />
-        </div>
-        <div class="form-group">
-          <label for="Date">Date</label>
-          <input type="text" class="form-control" id="Date" name="date_time" />
-        </div>
-        <div class="form-group">
-          <label for="Description">sumamry</label>
-          <textarea
-            class="form-control"
-            id="summary"
-            rows="3"
-            name="summary"
-            placeholder="Summary?"
-          ></textarea>
-        </div>
-        <input type="submit" value="Edit" />
-      </form>
-    </div>
-    <div class="col-sm-2"></div>
-  </div>
-</div>
-
-<%- include('./partials/footer.ejs') %>
