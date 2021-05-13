@@ -1,5 +1,7 @@
 import validate from 'express-validator';
-import { read, edit } from '../jsonFileStorage.js';
+import {
+  read, edit, add, del,
+} from '../jsonFileStorage.js';
 
 const { validationResult } = validate;
 // const { body, validationResult } = validateBody;
@@ -74,33 +76,55 @@ const editSingleSighting = (req, res) => {
   });
 };
 const deleteSingleSighting = (req, res) => {
-  res.send('Delete single sighting (DELETE REQ)');
+  const { index } = req.params;
+  del('./data.json', 'sightings', 0, (err, response) => {
+    if (!err) {
+      console.log(`THIS IS DELETESIGFHTING -- . ${response}`);
+      res.status(300).redirect('/');
+      return;
+    }
+    res.json(err);
+  });
 };
 const showShape = (req, res) => {
   // Read into DB and retrieve all sightings
   read('./data.json', (err, data) => {
+    const finalObjsToRespondWith = [];
+
+    // store unique shapes values
+    const uniqueShapes = new Set([]);
     if (err) {
       console.log(`ERROR READING IN HOME CONTROLLER ${err}`);
     } else {
       console.log(`DATA RECIEVED FROM READ FN ShowShape -> ${data.sightings}`);
       const shapesRecieved = [];
-      let index;
       const { sightings } = data;
 
       sightings.forEach((sighting, i) => {
+        uniqueShapes.add(sighting.shape);
         const singleShapeObj = {
           i,
           ...sighting,
         };
+
         shapesRecieved.push(singleShapeObj);
+
         console.log(`SHAPES ${shapesRecieved}`);
       });
+
+      // now check for repeated values
+      shapesRecieved.forEach((shape) => {
+        if (!uniqueShapes.has(shape.shape)) {
+          finalObjsToRespondWith.push(shape);
+        }
+      });
+
+      console.log(`THIS IS FINAL ${finalObjsToRespondWith}`);
       // Render EJS with shapes as variables
       res.render('shapes', {
         title: 'Shapes Reported',
         header: 'All  Reported Shapes',
         shapesRecieved,
-        index,
 
       });
     }
@@ -215,6 +239,68 @@ const putEditSighting = (req, res) => {
     res.status(200).redirect('/');
   });
 };
+const postSighting = (req, res) => {
+  // retrieve user input
+  const {
+    // eslint-disable-next-line camelcase
+    text, city, state, shape, duration, date_time, summary,
+  } = req.body;
+
+  // // convert to capital
+  // const toCapitalString = state.charAt(0).toUpperCase().slice(1);
+
+  // New sighting object to push to DB
+  const newSighting = {
+    text,
+    city,
+    state: state.charAt(0).toUpperCase().slice(1),
+    shape,
+    duration,
+    date_time,
+    summary,
+  };
+
+  // Validate user input
+  // Finds the validation errors in this request and wraps them in an object with handy functions
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(`ERROROROR VALIDATION =--------> ${errors.array()}`);
+    // Read into DB and retrieve unique info
+    read('./data.json', (err, data) => {
+      if (err) {
+        console.log(`ERROR READING FROM EDITSINGLESIGHTING ${err}`);
+      } else {
+        const messagesToRespondWith = [];
+        // Store err msg here
+        const errorsArray = errors.array();
+        errorsArray.forEach((errorObj) => {
+          // Retrieve neccessary error values and push to array to pass to client
+          const { param, msg } = errorObj;
+          const errObj = {
+            param,
+            msg,
+          };
+          messagesToRespondWith.push(errObj);
+        });
+        console.log(`FROM POSTSIGHTING ${messagesToRespondWith}`);
+
+        res.status(400).render('errorFormNewSighting', {
+          title: 'New Sighting',
+          errorMsg: messagesToRespondWith,
+          newSighting: { ...newSighting },
+        });
+      }
+    });
+    return;
+  }
+  add('./data.json', 'sightings', newSighting, (err) => {
+    if (!err) {
+      res.status(200).redirect('/');
+      return;
+    }
+    res.status(400).json(err);
+  });
+};
 
 export {
   home,
@@ -224,4 +310,6 @@ export {
   showShape,
   showOneShape,
   putEditSighting,
+  postSighting,
+  deleteSingleSighting,
 };

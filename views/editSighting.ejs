@@ -8,7 +8,7 @@
       <% if ( typeof state == 'string' && state) { %>
       <small><%= state %></small>
       <div class="container mt-2 p-5 d-none">
-        <% } else { %>
+        <% } else if (typeof editedData === 'object' && editedData) { %>
 
         <small
           >You are editing a sighting which occurred in <%=

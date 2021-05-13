@@ -1,0 +1,193 @@
+<%- include('./partials/header.ejs') %> 
+errorFormNewSighting
+    <div class="container text-center mt-3 p-2">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="sol-sm-8 text-center">
+          <h2>Report a new UFO sighting</h2>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+    </div>
+
+    <div class="container mt-2 p-2">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <form method="POST" action="/sighting">
+            <div class="form-group">
+              <label for="text">Description</label>
+              <textarea
+                class="form-control <% errorMsg.forEach(a => { %>
+                                  <% if (a.param === 'text') { %>
+                                  is-invalid
+                                  <% } %>
+                                <% }) %>"
+                id="text"
+                rows="3"
+                name="text"
+                placeholder="What did you see?"
+              ></textarea>
+                             <small class="text-danger">
+                <% errorMsg.forEach(err => { %>
+                  <% if (err.param === 'text') { %>
+                   <%= err.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="city">City</label>
+              <input
+              class="form-control <% errorMsg.forEach(a => { %>
+                                  <% if (a.param === 'city') { %>
+                                  is-invalid
+                                  <% } %>
+                                <% }) %>"
+                type="text"
+                id="city"
+                name="city"
+                placeholder="City"
+              />
+                                           <small class="text-danger">
+                <% errorMsg.forEach(err => { %>
+                  <% if (err.param === 'city') { %>
+                   <%= err.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="state">State</label>
+              <input
+                class="form-control <% errorMsg.forEach(a => { %>
+                                  <% if (a.param === 'state') { %>
+                                  is-invalid
+                                  <% } %>
+                                <% }) %>"
+                type="text"
+                id="state"
+                name="state"
+                placeholder="State"
+              />
+                                           <small class="text-danger">
+                <% errorMsg.forEach(err => { %>
+                  <% if (err.param === 'state') { %>
+                   <%= err.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="shape">Shape</label>
+              <input
+                class="form-control <% errorMsg.forEach(a => { %>
+                                  <% if (a.param === 'shape') { %>
+                                  is-invalid
+                                  <% } %>
+                                <% }) %>"
+                type="text"
+                id="shape"
+                name="shape"
+                placeholder="Any distinct shape to the UFO?"
+              />
+                                           <small class="text-danger">
+                <% errorMsg.forEach(err => { %>
+                  <% if (err.param === 'shape') { %>
+                   <%= err.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="duration">Duration</label>
+              <input
+                class="form-control <% errorMsg.forEach(a => { %>
+                                  <% if (a.param === 'duration') { %>
+                                  is-invalid
+                                  <% } %>
+                                <% }) %>"
+                type="text"
+                id="duration"
+                name="duration"
+                placeholder="How long was the UFO visible for?"
+              />
+                                           <small class="text-danger">
+                <% errorMsg.forEach(err => { %>
+                  <% if (err.param === 'duration') { %>
+                   <%= err.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input
+                class="form-control <% errorMsg.forEach(a => { %>
+                                  <% if (a.param === 'date_time') { %>
+                                  is-invalid
+                                  <% } %>
+                                <% }) %>"
+                type="text"
+                id="date"
+                name="date_time"
+                placeholder="date"
+              />
+                                           <small class="text-danger">
+                <% errorMsg.forEach(err => { %>
+                  <% if (err.param === 'date_time') { %>
+                   <%= err.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="summary">Summary</label>
+              <textarea
+                class="form-control <% errorMsg.forEach(a => { %>
+                                  <% if (a.param === 'summary') { %>
+                                  is-invalid
+                                  <% } %>
+                                <% }) %>"
+                id="summary"
+                rows="3"
+                name="summary"
+                placeholder="Short description"
+              ></textarea>
+                                           <small class="text-danger">
+                <% errorMsg.forEach(err => { %>
+                  <% if (err.param === 'summary') { %>
+                   <%= err.msg %>
+                  <% } %>
+                <% }) %>
+              </small>
+            </div>
+            <input type="submit" name="submit" id="submitBtn" value="Submit" />
+          </form>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+    </div>
+
+    <%- include('./partials/footer.ejs') %>
+  </div>
+</div>
+
+<script>
+  const text = document.getElementById('text');
+  const city = document.getElementById('city');
+  const state = document.getElementById('state');
+  const shape = document.getElementById('shape');
+  const duration = document.getElementById('duration');
+  const date = document.getElementById('date');
+  const summary = document.getElementById('summary');
+
+text.innerHTML = '<%= newSighting.text %>'
+city.value = '<%= newSighting.city %>'
+state.value = '<%= newSighting.state %>'
+shape.value = '<%= newSighting.shape %>'
+duration.value = '<%= newSighting.duration %>'
+date.value = '<%= newSighting.date_time %>'
+summary.innerHTML = '<%= newSighting.summary %>'
+
+</script>

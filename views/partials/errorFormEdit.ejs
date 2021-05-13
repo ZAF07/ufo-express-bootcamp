@@ -4,13 +4,8 @@
 %> 
 
   <div class="container mt-2 p-5">
-    <small><%= b %></small>
 
-<% b.forEach(a => { %>
-  <% 
 
-    %> 
-<% }) %>
 
       <div class="row">
         <div class="col-sm-2"></div>
@@ -18,7 +13,7 @@
           <form action="/sighting/<%= index %>?__method=PUT" method="POST">
             <input type="hidden" name="_method" value="PUT" />
             <div class="form-group">
-              <label for="Description">text</label>
+              <label for="text">text</label>
               <textarea
                 class="form-control <% b.forEach(a => { %>
                                   <% if (a.param === 'text') { %>
@@ -204,37 +199,5 @@ shape.value = '<%= editedData.shape %>'
 duration.value = '<%= editedData.duration %>'
 date.value = '<%= editedData.date_time %>'
 summary.innerHTML = '<%= editedData.editedSummary %>'
-
-  b.forEach(obj => {
-      switch (obj.param) {
-    case 'text':
-      console.log(`this is text ${text}`);
-      text.innerHTML = 'b'
-      break;
-    case 'city':
-      city.value = obj.msg
-      break;
-    case 'state':
-      state.innerHTML = obj.msg
-      break;
-    case 'shape':
-      shape.innerHTML = obj.msg
-      break;
-    case 'duration':
-      duration.innerHTML = obj.msg
-      break;
-    case 'date':
-      date.innerHTML = obj.msg
-      break;
-    case 'summary':
-      summary.innerHTML = obj.msg
-      break;
-  
-    default:
-      break;
-  }
-  })
-
-
 
 </script>

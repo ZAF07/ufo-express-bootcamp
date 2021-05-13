@@ -17,7 +17,7 @@ export function write(filename, jsonContentObj, callback) {
     if (writeErr) {
       console.error('Write error', jsonContentStr, writeErr);
       // Allow each client app to handle errors in their own way
-      callback(null, writeErr);
+      callback(writeErr, null);
       return;
     }
     console.log('Write success!');
@@ -76,7 +76,7 @@ export function add(filename, key, input, callback) {
     // If key does not exist in DB, exit
     if (!(key in jsonContentObj)) {
       // Call callback with relevant error message to let client handle
-      callback(null, "Key doesn't exist");
+      callback("Key doesn't exist", null);
       return;
     }
 
@@ -90,12 +90,12 @@ export function add(filename, key, input, callback) {
     writeFile(filename, updatedJsonContentStr, (writeErr) => {
       if (writeErr) {
         console.error('Error writing', updatedJsonContentStr, writeErr);
-        callback(null, writeErr);
+        callback(writeErr, null);
         return;
       }
       console.log('Write success!');
       // Call callback with updated JSON content Object
-      callback(jsonContentObj, null);
+      callback(null, jsonContentObj);
     });
   };
 
@@ -142,4 +142,27 @@ export function edit(filename, index, input, callback) {
   };
 
   readFile(filename, 'utf-8', handleFileRead);
+}
+
+// Delete function
+export function del(fileName, key, index, callback) {
+  // get all data from DB
+  read(fileName, (err, content) => {
+    if (!err) {
+      // const db = content.sightings;
+      const { sightings } = content;
+      sightings.splice(index - 1, 1);
+      // db = sightings.splice(2, 1);
+      const newDbAfterDelete = { sightings: [...sightings] };
+      write(fileName, newDbAfterDelete, (writeErr, results) => {
+        if (writeErr) {
+          console.log(`ERROR WRITING IN DEL() ${writeErr}`);
+        } else {
+          callback(null, results);
+        }
+      });
+      // callback(null, key);
+      // console.log(` From del jsonfilestorage --> ${sightings}`);
+    }
+  });
 }

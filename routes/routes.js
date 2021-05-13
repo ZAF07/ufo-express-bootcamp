@@ -9,6 +9,8 @@ import {
   showShape,
   showOneShape,
   putEditSighting,
+  postSighting,
+  deleteSingleSighting,
 }
   from '../controllers/appController.js';
 
@@ -26,6 +28,14 @@ const routes = express.Router();
 routes.use(methodOverride('__method'));
 routes.get('/', home);
 routes.get('/sighting', sightingForm);
+routes.post('/sighting', validate.check('text').isLength({ min: 10 }).withMessage('Share some details?'),
+  validate.check('city').isLength({ min: 1 }).withMessage('Where did it happened?'),
+  validate.check('state').isLength({ min: 1 }).withMessage('Where did it happened?'),
+  validate.check('shape').isLength({ min: 1 }).withMessage('Shape of the object?'),
+  validate.check('duration').isLength({ min: 1 }).withMessage('Tell us what ⏳ this happened?'),
+  validate.check('date_time').isLength({ min: 1 }).withMessage('Don\'t Forget 📅'),
+  validate.check('summary').isLength({ min: 1 }).withMessage('Leave a summary 📃'),
+  postSighting);
 routes.get('/sighting/:index', (singleSighting));
 routes.get('/sighting/:index/edit', (editSingleSighting));
 routes.put('/sighting/:index',
@@ -37,6 +47,7 @@ routes.put('/sighting/:index',
   validate.check('date_time').isLength({ min: 1 }).withMessage('Don\'t Forget 📅'),
   validate.check('summary').isLength({ min: 1 }).withMessage('Leave a summary 📃'),
   putEditSighting);
+routes.delete('/del/:index', deleteSingleSighting);
 routes.get('/shapes', showShape);
 routes.get('/shapes/:shape', showOneShape);
 
