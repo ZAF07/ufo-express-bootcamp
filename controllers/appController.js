@@ -170,9 +170,9 @@ const putEditSighting = (req, res) => {
       if (err) {
         console.log(`ERROR READING FROM EDITSINGLESIGHTING ${err}`);
       } else {
-        const { sightings } = data;
-        const sightingBeingEdited = sightings[index];
-        const { date_time, state, summary } = sightingBeingEdited;
+        // const { sightings } = data;
+        // const sightingBeingEdited = sightings[index];
+        // const { date_time, state, summary } = sightingBeingEdited;
 
         const messagesToRespondWith = [];
         // Store err msg here
