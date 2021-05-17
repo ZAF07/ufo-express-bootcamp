@@ -1,15 +1,44 @@
 import validate from 'express-validator';
+import passport from 'passport';
 import {
   read, edit, add, del,
 } from '../jsonFileStorage.js';
+import User from '../models/user.js';
 
 const { validationResult } = validate;
 // const { body, validationResult } = validateBody;
 // // const validateUserInput = () => {
 // //   body('description').isLength({ min: 10 });
 // // };
-
+let visitedNumberDays = 0;
+let user;
 const home = (req, res) => {
+  let user;
+  const userExists = req.user;
+  const date = new Date();
+  if (req.user) {
+    user = req.user.username;
+  }
+
+  res.cookie('day', date.getDate());
+  // const numberOfVisits = 0;
+  // let here;
+
+  // if (req.session.pageViews) {
+  //   req.session.pageViews += 1;
+  // } else {
+  //   req.session.pageViews = 1;
+  // }
+  const today = 15;
+  const tomorrow = 'tuesday';
+
+  if (req.cookies !== today) {
+    console.log(req.cookies);
+    console.log('!= today ', req.cookies.day);
+    visitedNumberDays += 1;
+    res.cookie.day = tomorrow;
+  }
+
   // Read into DB and retrieve all sightings
   read('./data.json', (err, data) => {
     let dataRecieved;
@@ -25,16 +54,47 @@ const home = (req, res) => {
       title: 'Home',
       content: dataRecieved,
       index: 0,
+      visitedNumberDays,
+      userExists,
+      user,
     });
   });
 };
 const sightingForm = (req, res) => {
+  let user;
+  if (req.user) {
+    user = req.user.username;
+  }
+  const date = new Date();
+  res.cookie('day', date.getDate());
+  // const numberOfVisits = 0;
+  // let here;
+
+  // if (req.session.pageViews) {
+  //   req.session.pageViews += 1;
+  // } else {
+  //   req.session.pageViews = 1;
+  // }
+  const today = 15;
+  const tomorrow = 'tuesday';
+
+  if (req.cookies !== today) {
+    console.log(req.cookies);
+    console.log('!= today ', req.cookies.day);
+    visitedNumberDays += 1;
+    res.cookie.day = tomorrow;
+  }
   res.render('sightingForm', {
     title: 'New Sighting',
+    user,
   });
 };
 const singleSighting = (req, res) => {
   const { index } = req.params;
+  let user;
+  if (req.user) {
+    user = req.user.username;
+  }
   console.log(req.params);
 
   read('./data.json', (err, data) => {
@@ -48,6 +108,7 @@ const singleSighting = (req, res) => {
         title: 'Single Sighting',
         index,
         singleSighting,
+        user,
 
       });
     }
@@ -55,7 +116,10 @@ const singleSighting = (req, res) => {
 };
 const editSingleSighting = (req, res) => {
   const { index } = req.params;
-
+  let user;
+  if (req.user) {
+    user = req.user.username;
+  }
   // Read into DB and retrieve unique info
   read('./data.json', (err, data) => {
     if (err) {
@@ -71,6 +135,7 @@ const editSingleSighting = (req, res) => {
         state,
         summary,
         index,
+        user,
       });
     }
   });
@@ -87,6 +152,10 @@ const deleteSingleSighting = (req, res) => {
   });
 };
 const showShape = (req, res) => {
+  let user;
+  if (req.user) {
+    user = req.user.username;
+  }
   // Read into DB and retrieve all sightings
   read('./data.json', (err, data) => {
     const finalObjsToRespondWith = [];
@@ -125,12 +194,18 @@ const showShape = (req, res) => {
         title: 'Shapes Reported',
         header: 'All  Reported Shapes',
         shapesRecieved,
+        visitedNumberDays,
+        user,
 
       });
     }
   });
 };
 const showOneShape = (req, res) => {
+  let user;
+  if (req.user) {
+    user = req.user.username;
+  }
   // retrieve requested shape from query param
   const shapeRequested = req.params.shape;
 
@@ -156,6 +231,7 @@ const showOneShape = (req, res) => {
       shapesToSend,
       index,
       shapeRequested,
+      user,
     });
   });
 };
@@ -302,6 +378,101 @@ const postSighting = (req, res) => {
   });
 };
 
+const getRegisterPage = (req, res) => {
+  let user;
+  if (req.user) {
+    user = req.user.username;
+  }
+  res.render('register', {
+    title: 'New User',
+    user,
+  });
+};
+
+const handleRegister = (req, res) => {
+  const userExists = req.user;
+
+  User.register(
+    { username: req.body.username },
+    req.body.password,
+    (err, user) => {
+      if (err) {
+        console.log(`Passport error ${err}`);
+        res.status(404).render('register', {
+          title: 'Sign Up Here',
+          userExists,
+          errMsg: err.message,
+        });
+      } else {
+        console.log(`HERE IS PASSPORT ${req.user}`);
+        passport.authenticate('local')(req, res, () => {
+          res.redirect('/sighting');
+        });
+      }
+    },
+  );
+};
+
+const handleLogIn = (req, res) => {
+  const userExists = req.user;
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password,
+  });
+  // Query DB to find if username exists
+  User.findOne({ username: user.username }, (err, found) => {
+    // If user is found, go ahead and run login()and authenticate
+    if (found) {
+      req.login(user, (logErr) => {
+        // If error, redirect to login page
+        if (logErr) {
+          console.log('LOGIN ERROR --> ', err);
+          res.redirect('/login');
+        } else {
+          console.log('FOUNDDDDD');
+          // Authenticate user and redirect to secrets page
+          passport.authenticate('local')(req, res, () => {
+            // on LogIn is where i set my session tokens and cookies
+            console.log(`Login error ${err}`);
+            console.log(user);
+            req.session.logged_in = user.username;
+            req.session.visited_times = 1;
+            res.render('sightingForm', {
+              user: user.username,
+              title: 'New Sighting',
+            });
+          });
+        }
+      });
+    } else {
+      console.log('nOOOOOOOO', err);
+      // If no such user exists redirect to sign up page and prompt to register
+      const errMsg = 'User not found. Please create a new account';
+      const d = new Date();
+      res.status(404).render('register', {
+        title: 'Sign Up Here',
+        userExists,
+        errMsg,
+      });
+    }
+  });
+};
+const handleLogOut = (req, res) => {
+  // Passport method to logout user
+
+  console.log(`USER -> ${req.user}`);
+  console.log(`SESSION -> ${req.session}`);
+  req.logout();
+  // On log out is where i destroy all sessions and cookies
+  req.session.destroy((err) => {
+    // cannot access session here
+    if (err) {
+      console.log(`SESSION DESTRYO ERROR ${err}`);
+    }
+  });
+  res.redirect('/');
+};
+
 export {
   home,
   sightingForm,
@@ -312,4 +483,8 @@ export {
   putEditSighting,
   postSighting,
   deleteSingleSighting,
+  handleRegister,
+  handleLogIn,
+  getRegisterPage,
+  handleLogOut,
 };

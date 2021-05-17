@@ -1,0 +1,41 @@
+<%- include('./partials/header.ejs') %>
+<div class="container mt-4 p-4">
+  <div class="row mt-4">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+      <form class="form-signin mt-4" method="POST" action="/register">
+        <h1 class="h3 mb-5 font-weight-normal">
+          Sign up here to post new sighthings
+        </h1>
+        <label for="username" class="sr-only">Username</label>
+        <input
+          type="text"
+          id="username"
+          class="form-control"
+          placeholder="Username"
+          required=""
+          autofocus=""
+          name="username"
+        />
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input
+          type="password"
+          id="inputPassword"
+          class="form-control"
+          placeholder="Password"
+          required=""
+          name="password"
+        />
+
+        <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">
+          Sign in
+        </button>
+        <p class="mt-5 mb-3 text-muted">© UFO</p>
+      </form>
+    </div>
+
+    <div class="col-sm-2"></div>
+  </div>
+</div>
+
+<%- include('./partials/footer.ejs') %>

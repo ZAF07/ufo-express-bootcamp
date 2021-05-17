@@ -11,6 +11,10 @@ import {
   putEditSighting,
   postSighting,
   deleteSingleSighting,
+  handleRegister,
+  handleLogIn,
+  getRegisterPage,
+  handleLogOut,
 }
   from '../controllers/appController.js';
 
@@ -50,5 +54,18 @@ routes.put('/sighting/:index',
 routes.delete('/del/:index', deleteSingleSighting);
 routes.get('/shapes', showShape);
 routes.get('/shapes/:shape', showOneShape);
+
+routes.get('/register', getRegisterPage);
+
+routes.post('/log-in', handleLogIn);
+routes.post('/register', handleRegister);
+routes.get('/log-out', handleLogOut);
+
+routes.get('/fav/:index?', (req, res) => {
+  if (req.cookies) {
+    console.log(`this is cookies ${req.cookies.name}`);
+  }
+  res.json(req.cookies);
+});
 
 export default routes;

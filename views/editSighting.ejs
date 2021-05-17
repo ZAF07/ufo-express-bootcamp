@@ -7,6 +7,10 @@
       <h2>Edit a UFO sighting</h2>
       <% if ( typeof state == 'string' && state) { %>
       <small><%= state %></small>
+      <small
+        >You are editing a sighting which occurred in <%= state %> at <%=
+        date_time %></small
+      >
       <div class="container mt-2 p-5 d-none">
         <% } else if (typeof editedData === 'object' && editedData) { %>
 
@@ -18,7 +22,7 @@
 
         <h5 class="mt-4">Sighting Summary</h5>
         <% if ( typeof summary == 'string' && summary) { %>
-        <small><%= summary %></small>
+        <small><%= summary %></small>>
         <div class="container mt-2 p-5 d-none">
           <% } else { %>
 
